@@ -25,8 +25,7 @@ function getALPHAquote(title){
           //add simbol and quote to inner result array variable
           innerRes.push(searchResult["Meta Data"]["2. Symbol"]);
           innerRes.push("quote");
-          innerRes.push(searchResult["Time Series (Daily)"]["2017-12-22"]["4. close"]);
-          console.log(innerRes);                                                            
+          innerRes.push(searchResult["Time Series (Daily)"]["2017-12-22"]["4. close"]);    
    });
 };
 
@@ -43,7 +42,6 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
 
           var series = searchResult["Technical Analysis: SMA"];
 
-          console.log(series);
 
           if (typeof series != "undefined") {
 
@@ -64,7 +62,6 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
               };
 
               checkFlag +=1;
-              console.log(checkFlag);
           };
           //draw trend line
           //var data = d3.tsv.parse(seriesTsv);
@@ -83,9 +80,12 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
     for(i=0;i<stockInfo.dateWMA.length;i++){seriesWMATsv = seriesWMATsv + stockInfo.dateWMA[i].substring(0, 10) + "\t" + stockInfo.WMA[i] + "\n";}
     for(i=0;i<stockInfo.dateMMA.length;i++){seriesMMATsv = seriesMMATsv + stockInfo.dateMMA[i].substring(0, 10) + "\t" + stockInfo.MMA[i] + "\n";}
     
-          var data = d3.tsv.parse(seriesWMATsv);
-          console.log(data);
-
+    // convert series to tsv
+    var data = d3.tsv.parse(seriesWMATsv);
+    // call visualization function
+    //Remove existing visual
+    d3.select("svg").remove();
+    filterData(seriesWMATsv);
     // reset checkFlag
     checkFlag =0;
   }

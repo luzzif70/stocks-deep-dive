@@ -1,3 +1,7 @@
+h1 {
+    text-align: center;
+}
+
 div{
   width:60%;
   color: #888;
@@ -27,3 +31,27 @@ div{
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+/* CSS for trend charts below */
+#viz-example{
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+/* CSS for trend charts  above */

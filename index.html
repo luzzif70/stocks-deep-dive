@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OMDB API</title>
+  <title>Alpha Stock API</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/pure/0.6.0/pure-min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,8 +15,10 @@
   </div>
 </form>
 
-<div class="viz-wrapper"></div>
-<svg width="960" height="500"></svg>
+<!-- SVG GOES IN THIS DIV BELOW 
+(the example visual is being added to this div in index.js)-->
+<div id="viz-example"></div>
+<!-- SVG GOES IN THIS DIV ABOVE -->
 
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
   <!-- D3 v3.5.5 : CURRENT VERSION IN PROD -->
@@ -24,5 +26,6 @@
   <!-- <script src="https://d3js.org/d3.v4.min.js"></script>-->
 
   <script src="js/main.js"></script>
+  <script src="js/trendViz.js"></script>
 </body>
 </html>
