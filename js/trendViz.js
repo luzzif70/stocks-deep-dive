@@ -1,4 +1,4 @@
-function filterData(seriesWMATsv){
+function filterData(seriesTsv,metric){
 
     var margin = {
         top: 20,
@@ -42,21 +42,21 @@ function filterData(seriesWMATsv){
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var data = d3.tsv.parse(seriesWMATsv);
+    var data = d3.tsv.parse(seriesTsv);
 
     // these vars will nmanage display of the y value on the chart
     var yVal = [];
     var  yQuote = "";
 
-    
-// REMOVE BELOW
-    //Filter data to selected role
-/*    var data = data.filter(function(row) {
-      return row['roles'] == filteredRole;
-    });*/
+    //Filter data to selected metric
+    var data = data.filter(function(row) {
+      return row['metric'] == metric;
+    });
+
+    console.log(data);
 
     color.domain(d3.keys(data[0]).filter(function(key) {
-      return key !== "date" && key !== "roles";
+      return key !== "date" && key !== "metric";
     }));
 
     data.forEach(function(d) {

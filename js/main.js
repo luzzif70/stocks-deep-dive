@@ -14,14 +14,17 @@ var stockInfo = {symbol:"",dateDMA:[],DMA:[],dateWMA:[],WMA:[],dateMMA:[],MMA:[]
 // check flag; it will increase by one for each successful api request
 var checkFlag = 0;
 // seriesTSV will contain the final value series in tsv (tab separated values) format used in D3 viz
-var seriesDMATsv = 'date\tclose\n'; 
-var seriesWMATsv = 'date\tclose\n'; 
-var seriesMMATsv = 'date\tclose\n'; 
+var seriesDMATsv = ''; 
+var seriesWMATsv = ''; 
+var seriesMMATsv = ''; 
+
+var seriesTsv = 'metric\tdate\tclose\n'; 
 // function used to clear TSV data sets
 function emptyDataSets(){
-  seriesDMATsv = 'date\tclose\n'; 
-  seriesWMATsv = 'date\tclose\n'; 
-  seriesMMATsv = 'date\tclose\n'; 
+  seriesDMATsv = ''; 
+  seriesWMATsv = ''; 
+  seriesMMATsv = ''; 
+  var seriesTsv = 'metric\tdate\tclose\n';
 };
 
 // launch empty D3 chart
@@ -99,14 +102,15 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
     $('#searchField').val("");
     $('#searchField').attr("placeholder", "Search for stock ticker");
     //convert object to Tab Separated Value file (TSV) to be used in D3 viz
-    for(i=0;i<stockInfo.dateWMA.length;i++){seriesWMATsv = seriesWMATsv + stockInfo.dateWMA[i].substring(0, 10) + "\t" + stockInfo.WMA[i] + "\n";}
-    console.log('sukamillu: ' + i);
-    for(i=0;i<stockInfo.dateMMA.length;i++){seriesMMATsv = seriesMMATsv + stockInfo.dateMMA[i].substring(0, 10) + "\t" + stockInfo.MMA[i] + "\n";}
-    // convert series to D3 data
-    var data = d3.tsv.parse(seriesWMATsv);
+    for(i=0;i<stockInfo.dateDMA.length;i++){seriesDMATsv = seriesDMATsv + 'daily' + "\t" + stockInfo.dateDMA[i].substring(0, 10) + "\t" + stockInfo.DMA[i] + "\n";}
+    for(i=0;i<stockInfo.dateWMA.length;i++){seriesWMATsv = seriesWMATsv + 'weekly' + "\t" + stockInfo.dateWMA[i].substring(0, 10) + "\t" + stockInfo.WMA[i] + "\n";}
+    for(i=0;i<stockInfo.dateMMA.length;i++){seriesMMATsv = seriesMMATsv + 'monthly' + "\t" + stockInfo.dateMMA[i].substring(0, 10) + "\t" + stockInfo.MMA[i] + "\n";}
+    
+    seriesTsv = seriesTsv + seriesDMATsv + seriesWMATsv + seriesMMATsv;
+
     //Remove existing visual (if any) & call visualization function
     d3.select("svg").remove();
-    filterData(seriesWMATsv);
+    filterData(seriesTsv,"daily");
     //display chart title
     $('h2').text("Moving average trend for " + title);
     // reset checkFlag
