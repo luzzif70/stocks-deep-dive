@@ -6,26 +6,51 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1><i class="material-icons">search</i>ALPHA Stock API</h1>
-  <form class="pure-form">
+
+<div class="container-fluid">
+  <h1>Alpha Stock API</h1>
+  <h2>Retrieve Stocks technical information in real time.</h2>
+  <h3>Retrieve Stocks technical information in real time.</h3>
+</div>
+
+<form class="pure-form">
   <input id="searchField" class="input" placeholder="Search for stock ticker"></input>
   <button id="searchBtn" class="pure-button pure-button-primary">GO!</button>
-  <div>
-  	<h2></h2>
-  </div>
 </form>
+
+<div class="container-fluid">
+
+  <h4>Filter MA by interval:</h4>
+  <!-- BUTTON GROUP BELOW 
+  (this button group is copied from components.html)
+  (click function for this in index.js) -->
+  <div class="button-group">
+    <button type="button" class="horizontalButtons" id="acting">Daily</button>
+    <button type="button" class="horizontalButtons" id="director">Weelky</button>
+    <button type="button" class="horizontalButtons" id="writer">Monthly</button>
+  </div>
+  <!-- BUTTON GROUP ABOVE -->
+<!-- 
+  STANDARD BUTTON BELOW 
+  (this standard button is copied from components.html)
+  (click function for this in index.js)
+  <button class="standard-button" id="clear-button">Show all Circles</button>
+  <!-- STANDARD BUTTON ABOVE -->
 
 <!-- SVG GOES IN THIS DIV BELOW 
 (the example visual is being added to this div in index.js)-->
-<div id="viz-example"></div>
+<div id="viz-chart"></div>
 <!-- SVG GOES IN THIS DIV ABOVE -->
+
+</div>
 
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
   <!-- D3 v3.5.5 : CURRENT VERSION IN PROD -->
   <script src="js/libs/d3.min.js"></script>
   <!-- <script src="https://d3js.org/d3.v4.min.js"></script>-->
 
-  <script src="js/main.js"></script>
   <script src="js/trendViz.js"></script>
+  <script src="js/main.js"></script>
+  
 </body>
 </html>

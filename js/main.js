@@ -10,13 +10,23 @@ var ALPHA_API_Q = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&
 var ALPHA_API_MA = "https://www.alphavantage.co/query?function=SMA&symbol=";
 
 // declare object that will contain stock info
-var stockInfo = {symbol:"",dateWMA:[],WMA:[],dateMMA:[],MMA:[]}; 
+var stockInfo = {symbol:"",dateDMA:[],DMA:[],dateWMA:[],WMA:[],dateMMA:[],MMA:[]}; 
 // check flag; it will increase by one for each successful api request
 var checkFlag = 0;
-
 // seriesTSV will contain the final value series in tsv (tab separated values) format used in D3 viz
+var seriesDMATsv = 'date\tclose\n'; 
 var seriesWMATsv = 'date\tclose\n'; 
 var seriesMMATsv = 'date\tclose\n'; 
+// function used to clear TSV data sets
+function emptyDataSets(){
+  seriesDMATsv = 'date\tclose\n'; 
+  seriesWMATsv = 'date\tclose\n'; 
+  seriesMMATsv = 'date\tclose\n'; 
+};
+
+// launch empty D3 chart
+var data = d3.tsv.parse(seriesWMATsv);
+filterData(seriesWMATsv);
 
 //getALPHAquote: get stock ticker's daily closing quote
 function getALPHAquote(title){
@@ -39,8 +49,12 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
           //convert object to Tab Separated Value file (TSV) to be used in D3 viz
           //for(i=0;i<Object.keys(series).length;i++){seriesTsv = seriesTsv + Object.keys(series)[i].substring(0, 10) + "\t" + Object.values(series)[i]["SMA"] + "\n";}
          
+          $('h3').css('color', '#505C69');
+          $('h3').text("Processing " + maType + " MA...");
 
           var series = searchResult["Technical Analysis: SMA"];
+
+          console.log(series);
 
 
           if (typeof series != "undefined") {
@@ -50,6 +64,7 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
 
               if(maType == "weekly"){
                   console.log("Pulling weekly moving average...");
+                  
                   //save dates to object
                   stockInfo.dateWMA = Object.keys(series)
                   for(i=0;i<Object.keys(series).length;i++){stockInfo.WMA[i]=Object.values(series)[i]["SMA"];};
@@ -59,6 +74,12 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
                   //save dates to object
                   stockInfo.dateMMA = Object.keys(series)
                   for(i=0;i<Object.keys(series).length;i++){stockInfo.MMA[i]=Object.values(series)[i]["SMA"];};
+              }
+              else if(maType == "daily"){
+                  console.log("Pulling daily moving average...");
+                  //save dates to object
+                  stockInfo.dateDMA = Object.keys(series)
+                  for(i=0;i<Object.keys(series).length;i++){stockInfo.DMA[i]=Object.values(series)[i]["SMA"];};
               };
 
               checkFlag +=1;
@@ -72,20 +93,22 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
           //});
    })
 ).done(function(){
-  if(checkFlag==2){
+  if(checkFlag==3){
     $('h2').empty();
+    $('h3').css('color', '#ffffff');
     $('#searchField').val("");
     $('#searchField').attr("placeholder", "Search for stock ticker");
     //convert object to Tab Separated Value file (TSV) to be used in D3 viz
     for(i=0;i<stockInfo.dateWMA.length;i++){seriesWMATsv = seriesWMATsv + stockInfo.dateWMA[i].substring(0, 10) + "\t" + stockInfo.WMA[i] + "\n";}
+    console.log('sukamillu: ' + i);
     for(i=0;i<stockInfo.dateMMA.length;i++){seriesMMATsv = seriesMMATsv + stockInfo.dateMMA[i].substring(0, 10) + "\t" + stockInfo.MMA[i] + "\n";}
-    
-    // convert series to tsv
+    // convert series to D3 data
     var data = d3.tsv.parse(seriesWMATsv);
-    // call visualization function
-    //Remove existing visual
+    //Remove existing visual (if any) & call visualization function
     d3.select("svg").remove();
     filterData(seriesWMATsv);
+    //display chart title
+    $('h2').text("Moving average trend for " + title);
     // reset checkFlag
     checkFlag =0;
   }
@@ -106,8 +129,11 @@ $('#searchBtn').on('click',function(event) {
   var ticker = $('#searchField').val();
   // pull moving averages from api
   if(ticker!=""){
+
+      emptyDataSets(); // remove previous data from data arrays
       $('h2').text("Retrieving data for " + ticker + " please wait ...");
       $('#searchBtn').prop("disabled",true);
+      getALPHAma(ticker,"daily"); // pull daily averages
       getALPHAma(ticker,"weekly"); // pull weekly averages
       getALPHAma(ticker,"monthly"); // pull montly averages
   }

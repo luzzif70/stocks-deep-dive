@@ -36,7 +36,7 @@ function filterData(seriesWMATsv){
         return y(d.temperature);
       });
 
-    var svg = d3.select("#viz-example").append("svg")
+    var svg = d3.select("#viz-chart").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
@@ -131,7 +131,7 @@ function filterData(seriesWMATsv){
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Number of movies");
+      .text("Stock price");
 
     var city = svg.selectAll(".city")
       .data(cities)
