@@ -68,9 +68,6 @@ h4 {
   shape-rendering: crispEdges;
 }
 
-.x.axis path {
-  display: none;
-}
 
 .line {
   fill: none;
@@ -102,6 +99,8 @@ h4 {
       background-color: #fff;
       border: 1px solid #E5E8EE; }
 
+  .button-group .horizontalButtons.buttonSpace {margin-left:30px;}
+
 .container-fluid {
     /*max-width: 960px;*/
     margin-bottom: 5px; 
@@ -112,5 +111,38 @@ h4 {
   margin-left: 10px;
   text-align: center;}
 
+.axis {
+  font-size: 10px;
+}
+
+.mouse-per-line {
+  font-size: 10px;
+}
 
 
+
+
+
+
+
+
+
+#wrap {
+    width: 1100px;
+    /*background-color: #ffcc33;*/
+    /*margin: auto;*/
+}
+#viz-chart {
+    width: 900px;
+    float: left;
+    height: 500px;
+}
+#watch-list {
+    width: 200px;
+    float: left;
+    height: 500px;
+    background-color: green;
+}
+#clear {
+    clear: both;
+}

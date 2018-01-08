@@ -24,7 +24,7 @@ function emptyDataSets(){
   seriesDMATsv = ''; 
   seriesWMATsv = ''; 
   seriesMMATsv = ''; 
-  var seriesTsv = 'metric\tdate\tclose\n';
+  seriesTsv = 'metric\tdate\tclose\n';
 };
 
 // launch empty D3 chart
@@ -87,13 +87,6 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
 
               checkFlag +=1;
           };
-          //draw trend line
-          //var data = d3.tsv.parse(seriesTsv);
-          //console.log(data);
-
-          //d3.tsv("data.tsv", function(data) {
-          //console.log(data[0].x);
-          //});
    })
 ).done(function(){
   if(checkFlag==3){
@@ -111,6 +104,8 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
     //Remove existing visual (if any) & call visualization function
     d3.select("svg").remove();
     filterData(seriesTsv,"daily");
+    // Set default to daily MA
+    $('#daily').addClass('active');
     //display chart title
     $('h2').text("Moving average trend for " + title);
     // reset checkFlag
@@ -126,15 +121,18 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
 }; // end of function getALPHAma;
 
 
+// load a new ticker and display default chart
 $('#searchBtn').on('click',function(event) {
 
   event.preventDefault();
 
+  $('.horizontalButtons').removeClass('active');
+
   var ticker = $('#searchField').val();
   // pull moving averages from api
   if(ticker!=""){
-
       emptyDataSets(); // remove previous data from data arrays
+      console.log("SUKA!");
       $('h2').text("Retrieving data for " + ticker + " please wait ...");
       $('#searchBtn').prop("disabled",true);
       getALPHAma(ticker,"daily"); // pull daily averages
@@ -145,5 +143,29 @@ $('#searchBtn').on('click',function(event) {
       $('#searchField').attr("placeholder", "Please type Ticker!");
   };
 
+});
+
+// display daily MA chart
+$('#daily').on('click',function(event) {
+    $('.horizontalButtons').removeClass('active');
+    $('#daily').addClass('active');
+    d3.select("svg").remove();
+    filterData(seriesTsv,"daily");
+});
+
+// display weekly MA chart
+$('#weekly').on('click',function(event) {
+    $('.horizontalButtons').removeClass('active');
+    $('#weekly').addClass('active');
+    d3.select("svg").remove();
+    filterData(seriesTsv,"weekly");
+});
+
+// display monthly MA chart
+$('#monthly').on('click',function(event) {
+    $('.horizontalButtons').removeClass('active');
+    $('#monthly').addClass('active');
+    d3.select("svg").remove();
+    filterData(seriesTsv,"monthly");
 });
 

@@ -53,8 +53,6 @@ function filterData(seriesTsv,metric){
       return row['metric'] == metric;
     });
 
-    console.log(data);
-
     color.domain(d3.keys(data[0]).filter(function(key) {
       return key !== "date" && key !== "metric";
     }));
@@ -92,7 +90,9 @@ function filterData(seriesTsv,metric){
       })
     ]);
 
-    var legend = svg.selectAll('g')
+
+// add legent to chart
+/*    var legend = svg.selectAll('g')
       .data(cities)
       .enter()
       .append('g')
@@ -116,7 +116,7 @@ function filterData(seriesTsv,metric){
       })
       .text(function(d) {
         return d.name;
-      });
+      });*/
 
     svg.append("g")
       .attr("class", "x axis")
@@ -221,7 +221,7 @@ function filterData(seriesTsv,metric){
                 });
 
             if(yVal.length>0){
-              yQuote = xDate.toDateString() + ": $" + yVal[0]["close"];
+              yQuote = xDate.toDateString() + ": $" + Number(yVal[0]["close"]).toFixed(2);
             };
 
             console.log(mouse[0]);
@@ -247,8 +247,9 @@ function filterData(seriesTsv,metric){
               .text(yQuote)
               .attr("transform", function(){if(mouse[0]>=(width*0.8)){return "translate(-140,3)"} else {return "translate(10,3)"};});
 
-              
-            return "translate(" + mouse[0] + "," + pos.y +")";
+            // adjust y position of stock price details
+            if(pos.y>10){var ypos = pos.y-20} else {var ypos = pos.y};
+            return "translate(" + mouse[0] + "," + ypos +")";
           });
       });
   // END EXAMPLE VIZ

@@ -25,22 +25,28 @@
   (this button group is copied from components.html)
   (click function for this in index.js) -->
   <div class="button-group">
-    <button type="button" class="horizontalButtons" id="acting">Daily</button>
-    <button type="button" class="horizontalButtons" id="director">Weelky</button>
-    <button type="button" class="horizontalButtons" id="writer">Monthly</button>
+    <button type="button" class="horizontalButtons" id="daily">Daily</button>
+    <button type="button" class="horizontalButtons" id="weekly">Weelky</button>
+    <button type="button" class="horizontalButtons" id="monthly">Monthly</button>
+
+    <button type="button" class="horizontalButtons buttonSpace" id="filler">+ Watch-list</button>
   </div>
   <!-- BUTTON GROUP ABOVE -->
-<!-- 
-  STANDARD BUTTON BELOW 
-  (this standard button is copied from components.html)
-  (click function for this in index.js)
-  <button class="standard-button" id="clear-button">Show all Circles</button>
-  <!-- STANDARD BUTTON ABOVE -->
 
-<!-- SVG GOES IN THIS DIV BELOW 
-(the example visual is being added to this div in index.js)-->
-<div id="viz-chart"></div>
-<!-- SVG GOES IN THIS DIV ABOVE -->
+
+<div id="wrap">
+    <!-- SVG GOES IN THIS DIV BELOW-->
+    <div id="viz-chart"></div>
+    <!-- SVG GOES IN THIS DIV ABOVE -->
+    <div id="watch-list">
+      <li id="1">1</li>
+      <li id="2">2</li>
+
+
+    </div>
+    <div id="clear"></div>
+</div>
+
 
 </div>
 
