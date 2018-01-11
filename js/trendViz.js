@@ -44,6 +44,8 @@ function filterData(seriesTsv,metric){
 
     var data = d3.tsv.parse(seriesTsv);
 
+    console.log("data size: " + data.length);
+
     // these vars will nmanage display of the y value on the chart
     var yVal = [];
     var  yQuote = "";
@@ -61,7 +63,7 @@ function filterData(seriesTsv,metric){
       d.date = parseDate(d.date);
     });
 
-    var cities = color.domain().map(function(name) {
+    var stocks = color.domain().map(function(name) {
       return {
         name: name,
         values: data.map(function(d) {
@@ -78,45 +80,17 @@ function filterData(seriesTsv,metric){
     }));
 
     y.domain([
-      d3.min(cities, function(c) {
+      d3.min(stocks, function(c) {
         return d3.min(c.values, function(v) {
           return v.temperature;
         });
       }),
-      d3.max(cities, function(c) {
+      d3.max(stocks, function(c) {
         return d3.max(c.values, function(v) {
           return v.temperature;
         });
       })
     ]);
-
-
-// add legent to chart
-/*    var legend = svg.selectAll('g')
-      .data(cities)
-      .enter()
-      .append('g')
-      .attr('class', 'legend');
-
-    legend.append('rect')
-      .attr('x', width - 20)
-      .attr('y', function(d, i) {
-        return i * 20;
-      })
-      .attr('width', 10)
-      .attr('height', 10)
-      .style('fill', function(d) {
-        return color(d.name);
-      });
-
-    legend.append('text')
-      .attr('x', width - 8)
-      .attr('y', function(d, i) {
-        return (i * 20) + 9;
-      })
-      .text(function(d) {
-        return d.name;
-      });*/
 
     svg.append("g")
       .attr("class", "x axis")
@@ -133,12 +107,12 @@ function filterData(seriesTsv,metric){
       .style("text-anchor", "end")
       .text("Stock price");
 
-    var city = svg.selectAll(".city")
-      .data(cities)
+    var stock = svg.selectAll(".stock")
+      .data(stocks)
       .enter().append("g")
-      .attr("class", "city");
+      .attr("class", "stock");
 
-    city.append("path")
+    stock.append("path")
       .attr("class", "line")
       .attr("d", function(d) {
         return line(d.values);
@@ -159,7 +133,7 @@ function filterData(seriesTsv,metric){
     var lines = document.getElementsByClassName('line');
 
     var mousePerLine = mouseG.selectAll('.mouse-per-line')
-      .data(cities)
+      .data(stocks)
       .enter()
       .append("g")
       .attr("class", "mouse-per-line");
@@ -223,8 +197,6 @@ function filterData(seriesTsv,metric){
             if(yVal.length>0){
               yQuote = xDate.toDateString() + ": $" + Number(yVal[0]["close"]).toFixed(2);
             };
-
-            console.log(mouse[0]);
             
             var beginning = 0,
                 end = lines[i].getTotalLength(),

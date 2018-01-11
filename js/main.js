@@ -19,6 +19,15 @@ var seriesWMATsv = '';
 var seriesMMATsv = ''; 
 
 var seriesTsv = 'metric\tdate\tclose\n'; 
+
+var watchList = [];
+
+var watchListCount = 0;
+
+// launch empty D3 chart
+//var data = d3.tsv.parse(seriesWMATsv);
+//filterData(seriesWMATsv);
+
 // function used to clear TSV data sets
 function emptyDataSets(){
   seriesDMATsv = ''; 
@@ -27,11 +36,33 @@ function emptyDataSets(){
   seriesTsv = 'metric\tdate\tclose\n';
 };
 
-// launch empty D3 chart
-var data = d3.tsv.parse(seriesWMATsv);
-filterData(seriesWMATsv);
+// this function will 'refresh' the event listeners in order to pick-up new lis from the watch-list
+function wlListener(){
 
-//getALPHAquote: get stock ticker's daily closing quote
+    $('.wlItem').on('click',function(e) 
+    {
+      e.preventDefault();
+      e.stopPropagation();  
+      var idtofetch = $(this).attr("id");
+      emptyDataSets();
+      runAPIs(idtofetch);
+      console.log(idtofetch);
+    });
+
+};
+
+
+function runAPIs(ticker){
+      emptyDataSets(); // remove previous data from data arrays
+      $('h2').text("Retrieving data for " + ticker + " please wait ...");
+      $('#searchBtn').prop("disabled",true);
+      getALPHAma(ticker,"daily"); // pull daily averages
+      getALPHAma(ticker,"weekly"); // pull weekly averages
+      getALPHAma(ticker,"monthly"); // pull montly averages
+      console.log(ticker);
+    }
+
+/*//getALPHAquote: get stock ticker's daily closing quote
 function getALPHAquote(title){
 
     $.get(ALPHA_API_Q + title + "&apikey=4015WQ58T9LOG18M",function(searchResult){
@@ -40,7 +71,7 @@ function getALPHAquote(title){
           innerRes.push("quote");
           innerRes.push(searchResult["Time Series (Daily)"]["2017-12-22"]["4. close"]);    
    });
-};
+};*/
 
 //getALPHAma: get stock ticker's moving average
 function getALPHAma(title,maType){
@@ -48,17 +79,11 @@ function getALPHAma(title,maType){
 console.log("inside api");
 
 $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&series_type=close&apikey=4015WQ58T9LOG18M",function(searchResult){
-
-          //convert object to Tab Separated Value file (TSV) to be used in D3 viz
-          //for(i=0;i<Object.keys(series).length;i++){seriesTsv = seriesTsv + Object.keys(series)[i].substring(0, 10) + "\t" + Object.values(series)[i]["SMA"] + "\n";}
          
           $('h3').css('color', '#505C69');
           $('h3').text("Processing " + maType + " MA...");
 
           var series = searchResult["Technical Analysis: SMA"];
-
-          console.log(series);
-
 
           if (typeof series != "undefined") {
 
@@ -67,7 +92,6 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
 
               if(maType == "weekly"){
                   console.log("Pulling weekly moving average...");
-                  
                   //save dates to object
                   stockInfo.dateWMA = Object.keys(series)
                   for(i=0;i<Object.keys(series).length;i++){stockInfo.WMA[i]=Object.values(series)[i]["SMA"];};
@@ -102,6 +126,7 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
     seriesTsv = seriesTsv + seriesDMATsv + seriesWMATsv + seriesMMATsv;
 
     //Remove existing visual (if any) & call visualization function
+    console.log('removing chart...');
     d3.select("svg").remove();
     filterData(seriesTsv,"daily");
     // Set default to daily MA
@@ -120,8 +145,9 @@ $.when($.get(ALPHA_API_MA + title + "&interval=" + maType + "&time_period=10&ser
     });
 }; // end of function getALPHAma;
 
+//EVENT LISTENERS BELOW
 
-// load a new ticker and display default chart
+// load a new ticker from search box and display default chart
 $('#searchBtn').on('click',function(event) {
 
   event.preventDefault();
@@ -131,13 +157,7 @@ $('#searchBtn').on('click',function(event) {
   var ticker = $('#searchField').val();
   // pull moving averages from api
   if(ticker!=""){
-      emptyDataSets(); // remove previous data from data arrays
-      console.log("SUKA!");
-      $('h2').text("Retrieving data for " + ticker + " please wait ...");
-      $('#searchBtn').prop("disabled",true);
-      getALPHAma(ticker,"daily"); // pull daily averages
-      getALPHAma(ticker,"weekly"); // pull weekly averages
-      getALPHAma(ticker,"monthly"); // pull montly averages
+      runAPIs(ticker);
   }
   else {
       $('#searchField').attr("placeholder", "Please type Ticker!");
@@ -145,6 +165,7 @@ $('#searchBtn').on('click',function(event) {
 
 });
 
+// Events from button group below
 // display daily MA chart
 $('#daily').on('click',function(event) {
     $('.horizontalButtons').removeClass('active');
@@ -168,4 +189,24 @@ $('#monthly').on('click',function(event) {
     d3.select("svg").remove();
     filterData(seriesTsv,"monthly");
 });
+
+// add current stock to watch-list
+$('#wl').on('click',function(event) {
+
+    if(stockInfo.symbol != "" && jQuery.inArray(stockInfo.symbol, watchList) == -1 && watchListCount <=10){
+          var wlStockToAdd = '<li id="' +  stockInfo.symbol +'" class="wlItem"><a href="#">' + stockInfo.symbol + '</a></li>';
+          $("#watch-list ul").append(wlStockToAdd);
+          watchList.push(stockInfo.symbol);
+          wlListener();
+      }
+
+    watchListCount += 1;
+
+});
+
+
+
+
+
+
 
