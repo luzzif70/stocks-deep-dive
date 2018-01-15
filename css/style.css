@@ -122,9 +122,22 @@ h4 {
 
 
 
+#chart-title {
+    width: 900px;
+    float: left;
+    margin-bottom: 5px; 
+    padding-top: 15px; 
+    text-align: center;
+}
 
-
-
+#watch-list-title {
+    width: 200px;
+    float: left;
+    margin-bottom: 5px; 
+    padding-top: 15px; 
+    text-align: center;
+    background-color: #D3D3D3;
+}
 
 
 #wrap {
@@ -141,7 +154,7 @@ h4 {
     width: 200px;
     float: left;
     height: 500px;
-    background-color: green;
+    background-color: #D3D3D3;
 }
 #clear {
     clear: both;

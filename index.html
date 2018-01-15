@@ -9,12 +9,12 @@
 
 <div class="container-fluid">
   <h1>Alpha Stock API</h1>
-  <h2>Retrieve Stocks technical information in real time.</h2>
+  <h2>Retrieve Stocks Moving Averages in real time.</h2>
   <h3>Retrieve Stocks technical information in real time.</h3>
 </div>
 
 <form class="pure-form">
-  <input id="searchField" class="input" placeholder="Search for stock ticker"></input>
+  <input id="searchField" class="input" size="31" placeholder="Search for stock ticker (e.g. AMZN)"></input>
   <button id="searchBtn" class="pure-button pure-button-primary">GO!</button>
 </form>
 
@@ -32,6 +32,17 @@
   </div>
   <!-- BUTTON GROUP ABOVE -->
 
+<div id="wrap">
+    <!-- SVG GOES IN THIS DIV BELOW-->
+    <div id="chart-title">
+       <p>Stock Moving Average</p>
+    </div>
+    <!-- SVG GOES IN THIS DIV ABOVE -->
+    <div id="watch-list-title">
+      <p>Watch List</p>
+    </div>
+    <div id="clear"></div>
+</div>
 
 <div id="wrap">
     <!-- SVG GOES IN THIS DIV BELOW-->
@@ -40,8 +51,6 @@
     <div id="watch-list">
       <ul class="wlItems">
       </ul>
-
-
     </div>
     <div id="clear"></div>
 </div>
